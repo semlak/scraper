@@ -1,4 +1,5 @@
 var NoteModel = require('../models/NoteModel.js');
+var HeadlineModel = require('../models/HeadlineModel.js');
 
 /**
  * NoteController.js
@@ -50,8 +51,9 @@ module.exports = {
         var Note = new NoteModel({
 			body : req.body.body,
 			articleId : req.body.articleId,
-			userId : req.body.userId,
-			likes : req.body.likes
+			// userId : req.body.userId,
+            userId: null,
+			likes : []
 
         });
 
@@ -62,7 +64,12 @@ module.exports = {
                     error: err
                 });
             }
-            return res.status(201).json(Note);
+            HeadlineModel.findById(Note.articleId).then(headline => {
+                headline.articleNotes.push(Note);
+                headline.save().then(res.status(201).json(Note))
+            })
+            // return res.status(201).json(Note);
+
         });
     },
 

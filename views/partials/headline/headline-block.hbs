@@ -1,16 +1,18 @@
-{{!-- <li id='headline-{{_id}}'>
-  <h3 class='title'>{{title}}</h3>
-  <p><a href={{url}}>{{url}}</a></p>
-  <p>{{summary}}</p>
-</li>
- --}}
 
-<article class="uk-card uk-card-default uk-card-body headline" id="headline-"{{_id}}>
-  <h3 class="uk-card-title  title">{{title}}
-  </h3>
-    <p><a href={{url}}>{{url}}</a></p>
-    <p>{{summary}}</p>
-    {{#each articleNotes}}
-        {{> note/note-block}}
-    {{/each}}
-</article>
+<li class=" uk-card uk-card-hover uk-card-default uk-card-body headline">
+<a class="uk-accordion-title" id="headline-"{{_id}} data-id={{_id}} href="#">{{title}}</a>
+<div class="uk-accordion-content" >
+  {{!-- <a class="uk-accordion-title" href="#"><h3 class="uk-card-title   title">{{title}}</a> --}}
+  {{!-- </h3> --}}
+    {{!-- <div class="uk-accordion-content"> --}}
+    <div class="">
+      <p><a href={{url}}>{{url}}</a></p>
+      <p>{{summary}}</p>
+{{!--       {{#each articleNotes}}
+          {{> note/note-block}}
+      {{/each}} --}}
+      {{> note/index}}
+    </div>
+</div>
+
+</li>
