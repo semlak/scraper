@@ -57,18 +57,24 @@ module.exports = {
 
         });
 
-        Note.save((err, Note) => {
+        Note.save((err, note) => {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when creating Note',
                     error: err
                 });
             }
-            HeadlineModel.findById(Note.articleId).then(headline => {
-                headline.articleNotes.push(Note);
-                headline.save().then(res.status(201).json(Note))
+            // HeadlineModel.findById(note.articleId).then(headline => {
+            //     headline.articleNotes.shift(note);
+            //     headline.save().then(res.status(201).json(note))
+            // })
+            HeadlineModel.findByIdAndUpdate(
+                note.articleId, { $push: {articleNotes: note}}
+            ).then(headline => {
+                res.json(note);
             })
-            // return res.status(201).json(Note);
+
+            // return res.status(201).json(note);
 
         });
     },

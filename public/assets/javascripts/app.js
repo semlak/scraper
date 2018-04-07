@@ -9,6 +9,11 @@ $(document).on("click", ".new-note", event => {
   let formTextArea = $(button).parent().find("textarea");
   let noteBody = formTextArea.val().trim();
   // console.log("noteBody", noteBody);
+  if (noteBody.length < 1) {
+    // return UIkit.notification({status: "warning", message: "Submitted comments cannot be empty strings."})
+    return UIkit.modal.alert("Submitted comments cannot be empty strings.")
+
+  }
   let noteData = {
     body: noteBody,
     articleId: $(button).data('articleId'),

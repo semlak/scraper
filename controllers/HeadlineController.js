@@ -11,7 +11,7 @@ module.exports = {
      * HeadlineController.list()
      */
     list: (req, res) => {
-        HeadlineModel.find((err, Headlines) => {
+        HeadlineModel.find().sort({articleDate: -1}).exec((err, Headlines) => {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting Headline.',
@@ -51,7 +51,7 @@ module.exports = {
 			title : req.body.title,
 			url : req.body.url,
 			articleDate : req.body.articleDate,
-			savedDate : req.body.savedDate,
+			// savedDate : req.body.savedDate,
 			articleNotes : req.body.articleNotes
 
         });

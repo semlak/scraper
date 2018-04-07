@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var UserController = require('../controllers/UserController.js');
-var axios = require("axios");
+// var axios = require("axios");
+const request = require("request");
 var cheerio = require("cheerio");
 var HeadlineModel = require('../models/HeadlineModel.js');
 
@@ -9,82 +10,87 @@ var HeadlineController = require('../controllers/HeadlineController.js');
 
 
 // router.get('/', UserController.list);
-router.get("/", (req, res) => {
-  let mainUrl = "http://www.echojs.com/";
 
-  axios.get(mainUrl).then(function(response) {
+router.get("/", (req, res) => {
+  let publicationUrls = [
+    "http://www.echojs.com/",
+    "https://www.washingtonpost.com",
+    "http://www.wedgelive.com/"
+  ]
+
+  publicationUrls.forEach(mainUrl => {
+
+  // mainUrl = ;
+  // axios.get(mainUrl).then(function(response) {
+  request(mainUrl, (err, response, html) => {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
-    var $ = cheerio.load(response.data);
+      var $ = cheerio.load(html);
+      let results = [];
+    if (mainUrl.match(/echojs/i)) {
+
+      results = $("article h2").map(function(i, element) {
+        // console.log("i", i, "element", element)
+        return {
+          title: $(this).children("a").text(),
+          url: $(this).children("a").attr("href"),
+          articleDate: null,
+          summary: null,
+          publication: mainUrl
+        }
+      }).toArray();
+    }
+    else if (mainUrl.match(/washingtonpost/)) {
+      results = $(".headline a").map(function(i, element) {
+        console.log($(element).parent().parent().find(".timestamp.time").data("timestamp"));
+        return {
+          title: $(element).text(),
+          url: $(element).attr("href"),
+          articleDate: new Date(Number($(element).parent().parent().find(".timestamp.time").data("timestamp"))),
+          summary: $(element).parent().parent().find(".blurb").text(),
+          publication: mainUrl
+        }
+      }).toArray();
+    }
+    else {
+      results = $(".blog-posts.hfeed").children().map(function(i, element) {
+        // console.log(element);
+        return {
+          title: $(element).find(".post-title a").text(),
+          url: $(element).find(".post-title a").attr("href"),
+          articleDate: $(element).find(".timestamp-link .published").attr("title"),
+          summary: $(element).find(".post-body").text(),
+          publication: mainUrl,
+          imageURL: $(element).find("img").attr("src")
+          
+        }
+      }).toArray();
+    }
+    console.log("results: ", results);
 
   // Now, we grab every h2 within an article tag, and do the following:
-    // var Headline = new HeadlineModel({
-    //   title : req.body.title,
-    //   url : req.body.url,
-    //   publication: mainUrl
-    //   articleDate : req.body.articleDate,
-    //   savedDate : req.body.savedDate,
-    //   articleNotes : req.body.articleNotes
-
-    // });
-
-    // Headline.save((err, Headline) => {
-    //     if (err) {
-    //         return res.status(500).json({
-    //             message: 'Error when creating Headline',
-    //             error: err
-    //         });
-    //     }
-    //     return res.status(201).json(Headline);
-    // });
-
-    let results = $("article h2").map(function(i, element) {
-      // console.log("i", i, "element", element)
-      return {
-        title: $(this).children("a").text(),
-        url: $(this).children("a").attr("href"),
-        articleDate: null,
-        summary: null,
-      }
-    })
-    console.log("results: ", results.toArray());
-    HeadlineModel.insertMany(results.toArray())
-      .then(headlines => res.json(headlines))
-      .catch(err => res.json(err));
-    // HeadlineModel.insertMany(results, (err, headlines) => {
-    //   if (err) throw err;
-    //   res.json(headlines);
-    // })
-
-    // $("article h2").each(function(i, element) {
-    //   // Save an empty result object
-    //   var result = {};
-
-    //   // Add the text and href of every link, and save them as properties of the result object
-    //   result.title = $(this)
-    //     .children("a")
-    //     .text();
-    //   result.link = $(this)
-    //     .children("a")
-    //     .attr("href");
-    //   console.log(result);
-
-
-
-    //   // Create a new Article using the `result` object built from scraping
-    //   // db.Article.create(result)
-    //   //   .then(function(dbArticle) {
-    //   //     // View the added result in the console
-    //   //     console.log(dbArticle);
-    //   //   })
-    //   //   .catch(function(err) {
-    //   //     // If an error occurred, send it to the client
-    //   //     return res.json(err);
-    //   //   });
-    // });
-
-    // If we were able to successfully scrape and save an Article, send a message to the client
-    // res.send("Scrape Complete");
+    if (true) {
+      results.forEach(result=>
+        HeadlineModel.findOneAndUpdate(
+          {url: result.url},
+          result,
+          {upsert: true, new: true, runValidators: true, })
+            .then(headline => console.log(headline))
+            .catch(err => console.log("error\n\n\n", err))
+        );
+      // HeadlineModel.bulkWrite(results.map(result => {
+      //   return {
+      //     insertOne: result
+      //   }
+      // }))
+    }
+    else {
+      HeadlineModel.insertMany(results, {ordered: false})
+        .then(headlines => res.json(headlines))
+        .catch(err => res.json(err));
+    }
   });
+  })
+      res.json("done")
 })
 
 module.exports = router;

@@ -11,7 +11,9 @@ var NoteSchema = new Schema({
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'User'
 	},
-	'likes' : Array
+	'likes' : Array,
+	date: { type: Date, default: Date.now },
+
 });
 
 module.exports = mongoose.model('Note', NoteSchema);
