@@ -1,6 +1,7 @@
-
-{{> note/note-form}}
-<br>
-{{#each articleNotes}}
-    {{> note/note-block}}
-{{/each}}
+<div class="article-notes-container" id='notes-container-{{_id}}' hidden>
+    {{> note/note-form}}
+    <br>
+    {{#each articleNotes}}
+        {{> note/note-block}}
+    {{/each}}
+</div>

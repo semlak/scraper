@@ -1,18 +1,32 @@
 
-<li class=" uk-card uk-card-hover uk-card-default uk-card-body headline">
-<a class="uk-accordion-title" id="headline-"{{_id}} data-id={{_id}} href="#">{{title}}</a>
-<div class="uk-accordion-content" >
-  {{!-- <a class="uk-accordion-title" href="#"><h3 class="uk-card-title   title">{{title}}</a> --}}
-  {{!-- </h3> --}}
-    {{!-- <div class="uk-accordion-content"> --}}
-    <div class="">
-      <p><a href={{url}}>{{url}}</a></p>
-      <p>{{summary}}</p>
-{{!--       {{#each articleNotes}}
-          {{> note/note-block}}
-      {{/each}} --}}
-      {{> note/index}}
-    </div>
-</div>
+<li class=" uk-card uk-card-hover uk-card-default uk-card-body headline" data-id={{_id}}>
+  {{!-- <a class="uk-accordion-title" id="headline-"{{_id}} data-id={{_id}} href="#">{{title}}</a> --}}
+  <h4 id="headline-"{{_id}} class="uk-article-title" data-id={{_id}} href="#">{{title}}</h4>
+  {{#if isSaved}}
+  <button class='uk-button uk-button-danger remove-save-article' data-article-id={{_id}}>Removed from Saved</button>
+  {{else}}
+  <button class='uk-button uk-button-primary save-article' data-article-id={{_id}}  >Save Article</button>
+  {{/if}}
+  {{!-- <button class='uk-button uk-button-primary save-article' data-saved="{{isSaved}}">Save Article</button> --}}
+  <button class="uk-button uk-button-secondary add-view-notes"  data-article-id={{_id}}  uk-toggle="target: #notes-container-{{_id}}; animation: uk-animation-slide-top-small">View/Add Notes</button>
+  {{!-- <a href="#" class='uk-button uk-button-danger uk-accordion-title' >View/Add Notes</a> --}}
+  {{!-- <div class="uk-accordion-content" > --}}
+  <div class="" >
+  <p class="uk-text-lead">{{summary}}</p>
+    {{!-- <a class="uk-accordion-title" href="#"><h3 class="uk-card-title   title">{{title}}</a> --}}
+    {{!-- </h3> --}}
+      {{!-- <div class="uk-accordion-content"> --}}
+      <div class="">
+        <p><a href={{url}}>{{url}}</a></p>
+  {{!--       {{#each articleNotes}}
+            {{> note/note-block}}
+        {{/each}} --}}
+
+        {{!-- <div class="article-notes-container" id='notes-container-'{_id} hidden=true> --}}
+        {{!-- <div class="article-notes-container" id='notes-container-{{_id}}' hidden> --}}
+          {{> note/index}}
+        {{!-- </div> --}}
+      </div>
+  </div>
 
 </li>

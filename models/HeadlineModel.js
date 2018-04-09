@@ -9,7 +9,11 @@ var HeadlineSchema = new Schema({
   },
   'publication': String,
 	'articleDate' : Date,
-	'savedDate' : { type: Date, default: Date.now },
+  'savedDate' : { type: Date, default: Date.now },
+  'isSaved': {
+    type: Boolean,
+    default: false
+  },
   'imageURL': String,
   'summary' : String,
 	'articleNotes' : Array

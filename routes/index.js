@@ -11,7 +11,7 @@ router.get('/', (req, res, next) => {
     .find()
     .sort({articleDate: -1})
     .then(headlines =>  {
-      // console.log(headlines);
+      console.log(headlines);
       res.render('index', {title: "Headlines", headlines: headlines})
     })
     .catch(err => res.render('index', {title: 'Express', error : "Unable to load headlines."}))
