@@ -1,6 +1,7 @@
 let submitNewNote = data => {
   $.post("/notes", data).then(response => {
-    console.log(response);
+    // console.log(response);
+    location.href=location.href;
   }).catch(err => console.log(err))
 }
 
@@ -11,21 +12,9 @@ let setArticleSaveStatus = (id, isSaved) => {
     data: {isSaved},
   }).then(response => {
     console.log(response);
+    location.href=location.href;
   })
 }
-
-// $(document).on("click", ".add-view-notes", event => {
-//   let button = event.currentTarget;
-//   let notesContainer =  $(button).parent().find('.article-notes-container')
-//   if (notesContainer.attr("hidden")) {
-//     notesContainer.attr("hidden", false).addClass("uk-animation-slide-top-small")
-//     $(button).text("Hide Notes")
-//   }
-//   else {
-//     notesContainer.attr("hidden", true).addClass("uk-animation-reverse")
-//     $(button).text("View/Add Notes")
-//   }
-// })
 
 $(document).on("click", '.save-article', event => {
   console.log("heard click")
@@ -39,6 +28,16 @@ $(document).on("click", '.remove-save-article', event => {
   let button = event.currentTarget;
   const articleId = $(button).data('articleId');
   setArticleSaveStatus(articleId, false);
+})
+
+
+$(document).on("click", '#rescrape' , event=> {
+  event.preventDefault();
+  $.get("/scraper").then(response => {
+    location.href=location.href;
+  }).catch(err => {
+    UIkit.modal.alert("Error while re-scraping articles.")
+  })
 })
 
 $(document).on("click", ".new-note", event => {
