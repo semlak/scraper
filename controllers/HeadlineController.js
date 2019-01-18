@@ -11,13 +11,13 @@ var cheerio = require("cheerio");
 
 
 let requestPromise = url => {
-  console.log('creating promise, url', url)
+  // console.log('creating promise, url', url)
   return new Promise((resolve, reject) => {
-    console.log('about to run request')
+    // console.log('about to run request')
     request(url, (err, response, html) => {
       // console.log("inside request callback, err", err, "response", response, "html", html)
-      console.log("inside request callback, err", err, "response", typeof response, "html", typeof html)
-      console.log("resolve", typeof resolve, "reject", typeof reject)
+      // console.log("inside request callback, err", err, "response", typeof response, "html", typeof html)
+      // console.log("resolve", typeof resolve, "reject", typeof reject)
       // console.log("inside request callback, err", err, "response", response, "html", html)
       if (err) {
         console.log("rejecting")
@@ -100,10 +100,10 @@ module.exports = {
      */
     update: (req, res) => {
         var id = req.params.id;
-        console.log(id, req.body);
+        // console.log(id, req.body);
         HeadlineModel.update({_id: id}, {$set: {isSaved: req.body.isSaved || req.body.isSaved === "true"}}).then(response => {
         // HeadlineModel.find({_id: id}).then(response => {
-            console.log(response);
+            // console.log(response);
             res.json(response);
         }).catch(err => res.json(err)); 
     },
@@ -175,7 +175,9 @@ module.exports = {
                 {url: result.url},
                 result,
                 {upsert: true, new: true, runValidators: true, })
-                .then(headline => console.log(headline))
+                .then(headline => {
+                  // console.log(headline)
+                })
                 .catch(err => console.log("error\n\n\n", err))
             ))
             .then(repsonse => res.json({results: "Done with scraping articles"}))

@@ -2,13 +2,13 @@ var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 
 var HeadlineSchema = new Schema({
-	'title' : String,
-	'url' : {
+  'title' : String,
+  'url' : {
     type: String,
     unique: true,
   },
   'publication': String,
-	'articleDate' : Date,
+  'articleDate' : Date,
   'savedDate' : { type: Date, default: Date.now },
   'isSaved': {
     type: Boolean,
@@ -16,7 +16,7 @@ var HeadlineSchema = new Schema({
   },
   'imageURL': String,
   'summary' : String,
-	'articleNotes' : Array
+  'articleNotes' : Array
 });
 
 module.exports = mongoose.model('Headline', HeadlineSchema);

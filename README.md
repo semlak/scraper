@@ -1,6 +1,6 @@
-# AwesomeArticleScraper
+# MyArticleScraper
 
-***AwesomeArticleScraper*** is a web-based full stack news article scraping application.
+***MyArticleScraper*** is a web-based full stack news article scraping application.
 
 It scrapes articles from the [Washington Post](https://www.washingtonpost.com) and the [Wedge Live](https://www.wedgelive.com).
 
